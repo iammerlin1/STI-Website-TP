@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STI College</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #1a4fa0;
+      --yellow: #f5c000;
+      --white:  #ffffff;
+      --light:  #f4f6fb;
+      --text:   #1a1f2e;
+      --muted:  #6b7280;
+      --border: #dde3ef;
+      --nav-h:  68px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; color: var(--text); background: var(--white); }
+
+    h1, h2, h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    p { color: var(--muted); line-height: 1.75; }
+    a { text-decoration: none; color: inherit; }
+    img { width: 100%; display: block; object-fit: cover; }
+
+    section { padding: 80px 6%; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* BUTTONS */
+    .btn-blue, .btn-yellow {
+      display: inline-block;
+      padding: 12px 28px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-blue   { background: var(--blue);   color: var(--white); }
+    .btn-yellow { background: var(--yellow); color: var(--blue); font-weight: 800; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      height: var(--nav-h);
+      background: var(--white);
+      border-bottom: 3px solid var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6%;
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--blue);
+      text-transform: uppercase;
+    }
+
+    .nav-links { list-style: none; display: flex; gap: 8px; }
+
+    .nav-links a {
+      font-size: 0.87rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text);
+      padding: 6px 12px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+    .nav-links a.active { border-bottom: 2px solid var(--yellow); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); }
+
+    /* HERO */
+    #home { padding-top: var(--nav-h); }
+
+    .hero-bg {
+    width: 100%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .carousel-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .carousel-dots span.active {
+      background: #fff;
+    }
+
+    /* SECTION H2 — shared */
+    #courses h2, #facilities h2, #instructors h2, .contact-panel h2 {
+      font-size: 2.4rem;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    #facilities > .container > p,
+    .contact-panel > .container > p { margin-bottom: 40px; }
+
+    /* CARD IMAGE PLACEHOLDER — shared */
+      .course-card .card-img,
+      .fac-card .card-img,
+      .instructor-card .card-img {
+        width: 100%;
+        background: var(--light);
+        border-bottom: 2px solid var(--yellow);
+        overflow: hidden;        /* ADD THIS */
+      }
+
+      .course-card .card-img img,
+      .fac-card .card-img img,
+      .instructor-card .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;       /* fills box, no overflow */
+        display: block;
+      }
+
+    /* COURSES */
+    #courses { background: var(--blue); }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1);
+      gap: 20px;
+    }
+
+    .course-card { border: 1px solid var(--border); background: var(--white); }
+    .course-card .card-img { height: 300px; object-fit: contain; overflow: hidden; background: #f0f0f0; }
+    .course-card .card-body { padding: 20px; }
+    .course-card h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+    .course-card p  { font-size: 0.88rem; }
+
+    .course-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: #e8edf6;
+      padding: 3px 10px;
+    }
+
+    /* FACILITIES */
+    #facilities {
+      background: var(--light);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .facilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .fac-card { background: var(--white); border: 1px solid var(--border); overflow: hidden; }
+    .fac-card .card-img { height: 170px; overflow: hidden; }
+
+    .fac-name {
+      padding: 12px 14px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--blue);
+      border-top: 3px solid var(--yellow);
+    }
+
+    /* INSTRUCTORS */
+    #instructors { background: var(--white); }
+
+    .instructors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
+    }
+
+    .instructor-card { border: 1px solid var(--border); background: var(--white); overflow: hidden; }
+    .instructor-card .card-img { height: 220px; overflow: hidden; }
+    .instructor-card .card-img img { object-position: center top; }
+    .instructor-card .card-body { padding: 16px; }
+    .instructor-card h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 4px; }
+    .instructor-card p  { font-size: 0.83rem; }
+
+    .instructor-dept {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    /* ABOUT */
+    #about { background: var(--blue); }
+    #about h2 { font-size: 2.4rem; color: var(--white); margin-bottom: 16px; }
+    #about p  { color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-img {
+      width: 100%;
+      height: 320px;
+      background: rgba(255,255,255,0.1);
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* CONTACT */
+    .contact-panel { background: var(--white); padding: 80px 6%; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item { display: flex; gap: 14px; align-items: flex-start; }
+
+    .contact-icon {
+      font-size: 1.2rem;
+      width: 40px; height: 40px;
+      background: var(--light);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+
+    .contact-item span { font-size: 0.9rem; color: var(--muted); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--blue); }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    /* FOOTER */
+    footer { background: var(--text); padding: 48px 6% 24px; }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    footer p    { color: rgba(255,255,255,0.35); font-size: 0.85rem; }
+    footer ul   { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    footer ul a { color: rgba(255,255,255,0.4); font-size: 0.86rem; }
+    footer ul a:hover { color: var(--white); }
+
+    footer h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 14px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-bottom p { font-size: 0.78rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      nav.open .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-h); left: 0; right: 0;
+        background: var(--white);
+        border-top: 1px solid var(--border);
+        padding: 16px 6%;
+        gap: 4px;
+      }
+
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      section, .contact-panel { padding: 60px 5%; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-bg { height: 400px; }
+    }
+
+    .Scroll-Container{
+      overflow-x: auto;
+      white-space: nowrap;
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo">STI College</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home"        class="nav-link active">Home</a></li>
+    <li><a href="#courses"     class="nav-link">Courses</a></li>
+    <li><a href="#facilities"  class="nav-link">Facilities</a></li>
+    <li><a href="#instructors" class="nav-link">Instructors</a></li>
+    <li><a href="#about"       class="nav-link">About Us</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+
+<section id="home">
+  <div class="hero-bg">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide">
+        <a href="#contact-panel" class="nav-link">
+          <img src="Image 1.png" alt="Slide 1">
+        </a>
+      </div>
+      <div class="carousel-slide">
+        <img src="Image 2.png" alt="Slide 2">
+      </div>
+      <div class="carousel-slide">
+        <img src="Image 3.png" alt="Slide 3">
+      </div>
+    </div>
+    <div class="carousel-dots" id="carouselDots">
+      <span class="active"></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</section>
+
+
+<section id="courses">
+  <div class="container">
+    <div class="section-label">Academic Programs</div>
+    <h2>Courses &amp; Specializations</h2>
+    <div class="courses-grid">
+
+      <div class="course-card">
+        <div class="card-img">
+        <img src="IT.png" alt="IT">
+        </div>
+          <div class="card-body">
+            <h3>BS INFORMATION TECHNOLOGY</h3>
+            <p>Designed to provide a broad understanding of information and communication technology, our BSIT program delivers an innovative education that equips students with practical knowledge and real-life skills to adapt in a rapidly evolving ICT-driven world.
+                Grasp various technical expertise from cloud computing, mobile & web development, cybersecurity, user experience design to information management, and get industry-standard certifications from our global partners including Huawei, Microsoft, and Oracle to name a few.</p>
+            <span class="course-tag">4-Year Program</span>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="facilities">
+  <div class="container">
+    <div class="section-label">Campus Infrastructure</div>
+    <h2>Our Facilities</h2>
+    <p>Industry-grade spaces built for learning, innovation, and student life.</p>
+    <div class="facilities-grid">
+      <div class="fac-card"><div class="card-img"><img src="Computer Lab.png" alt="Lab"></div><div class="fac-name">Computer Laboratories</div></div>
+      <div class="fac-card"><div class="card-img"><img src="Gym.png" alt="Gym"></div><div class="fac-name">Gymanasium</div></div>
+      <div class="fac-card"><div class="card-img"><img src="Mezzanine.png" alt="Mezza"></div><div class="fac-name">Mezzanine</div></div>
+      <div class="fac-card"><div class="card-img"><img src="Canteen.png" alt="Canteen"></div><div class="fac-name">Canteen</div></div>
+      <div class="fac-card"><div class="card-img"><img src="Lobby.png" alt="Lobby"></div><div class="fac-name">Lobby</div></div>
+      <div class="fac-card"><div class="card-img"><img src="Library.png" alt="Lab"></div><div class="fac-name">Library</div></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="instructors">
+  <div class="container">
+    <div class="section-label">Our Educators</div>
+    <h2>Meet Our Instructors</h2>
+    <div class="instructors-grid">
+
+      <div class="instructor-card">
+        <div class="card-img"><img src="Sir JC.jpeg" alt="Sir JC"></div>
+        <div class="card-body">
+          <h3>Jose Carlos T. Gonzalez</h3>
+          <div class="instructor-dept">Academic Head</div>
+        </div>
+      </div>
+
+      <div class="instructor-card">
+        <div class="card-img"><img src="Sir Arvin.jpeg" alt="Sir Arvin"></div>
+        <div class="card-body">
+          <h3>Arvin M. Sadicon, LPT</h3>
+          <div class="instructor-dept">ICT Program Head</div>
+        </div>
+      </div>
+
+      <div class="instructor-card">
+        <div class="card-img"><img src="Sir Dex.jpeg" alt="Sir Dex"></div>
+        <div class="card-body">
+          <h3>Dexter Belarmino</h3>
+          <div class="instructor-dept">IT Instructor</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="about">
+  <div class="container">
+    <div class="section-label" style="color:var(--yellow);">Who We Are</div>
+    <div class="about-grid">
+      <div>
+        <h2>Shaping Leaders of Tomorrow</h2>
+        <p>Founded in 1983, STI has grown into one of the Philippines' largest educational institutions with over 120 campuses and 40,000+ students nationwide.</p>
+        <p>Our programs bridge academic learning with industry requirements — equipping graduates with the skills and confidence to compete globally.</p>
+        <p>STI's E2E (Enrollment to Employment) system supports every student from admission through career placement.</p>
+        <br>
+        <a href="#about" class="btn-yellow">Learn More</a>
+      </div>
+      <div>
+        <div class="about-img"><img src="STI building.png" alt="STI"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="contact-panel" id="contact-panel">
+  <div class="container">
+    <div class="section-label">Get In Touch</div>
+    <h2>Contact Us</h2>
+    <p>Have questions about admissions or programs? We're happy to help.</p>
+    <div class="contact-grid">
+
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div><strong>Address</strong><span>7th Floor, STI Holdings Center, 6764 Ayala Ave., Makati City</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div><strong>Phone</strong><span>+63 2 8811-0101</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div><strong>Email</strong><span>admissions@sti.edu.ph</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div><strong>Office Hours</strong><span>Monday – Friday, 8:00 AM – 5:00 PM</span></div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Juan"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="dela Cruz"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="juan@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Program of Interest</label>
+          <select>
+            <option value="">Select a program…</option>
+            <option>BS Information Technology</option>
+            <option>BS Computer Science</option>
+            <option>BS Electronics Engineering</option>
+            <option>BS Business Administration</option>
+            <option>BS Multimedia Arts</option>
+            <option>Senior High School</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Write your message here…"></textarea>
+        </div>
+        <button class="btn-blue" onclick="alert('Message sent!')">Send Message</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">STI College</div>
+      <p>Be Future-Ready. Be STI.<br>Serving Filipino students since 1983.</p>
+    </div>
+    <div>
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="#courses">BS Info Technology</a></li>
+        <li><a href="#courses">BS Computer Science</a></li>
+        <li><a href="#courses">BS Electronics Engr.</a></li>
+        <li><a href="#courses">Senior High School</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Campus</h4>
+      <ul>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#instructors">Instructors</a></li>
+        <li><a href="#about">About STI</a></li>
+        <li><a href="#about">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">admissions@sti.edu.ph</a></li>
+        <li><a href="#">+63 2 8811-0101</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 STI Education Systems Holdings, Inc. All rights reserved.</p>
+    <p>Privacy Policy · Terms of Use</p>
+  </div>
+</footer>
+
+
+<script>
+  const sections = ['home','courses','facilities','instructors','about'];
+
+  window.addEventListener('scroll', () => {
+    let current = 'home';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 90) current = id;
+    });
+    document.querySelectorAll('.nav-link').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+
+  function toggleMenu() {
+    document.getElementById('navbar').classList.toggle('open');
+  }
+
+  document.querySelectorAll('.nav-link').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navbar').classList.remove('open'));
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  const track = document.getElementById('carouselTrack');
+  const dots = document.querySelectorAll('#carouselDots span');
+  let current = 0;
+  const total = dots.length;
+
+  function goTo(index) {
+    current = index;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+  setInterval(() => goTo((current + 1) % total), 4000);
+</script>
+</script>
+
+</body>
+</html>
